@@ -5,6 +5,7 @@
 #ifndef APP_NOTE_H
 #define APP_NOTE_H
 
+
 typedef struct sNote sNote;
 
 struct sNote{
