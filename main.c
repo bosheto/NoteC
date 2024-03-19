@@ -1,29 +1,55 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-typedef struct sNote sNote;
+#include "app-note.h"
 
-struct sNote{
-    char name[64];
-    char content[256];
+#define CREATE_NOTE 1
+#define EXIT 0
 
-};
-
-void printNote(sNote* note) {
-    printf("\n%s", note->name);
-    printf("----------------------------");
-    printf("\n\t%s", note->content);
-};
+void clearInputBuffer(void);
 
 int main(void) {
+    int exit = 0;
+    sNote *note;
+    while(exit == 0) {
+        int option;
+        printf("enter option\n");
+        scanf("%d", &option);
+        clearInputBuffer();
 
-    sNote note;
-
-    printf("Enter note heading: 64 characters\n");
-    fgets(note.name, sizeof(note.name), stdin);
-    printf("Enter note content: max 256 characters\n");
-    fgets(note.content, sizeof(note.content), stdin);
-
-    printNote(&note);
+        switch (option) {
+            case EXIT:
+                exit = 1;
+                break;
+            case CREATE_NOTE:
+                note = malloc(sizeof(sNote));
+                createNote(note);
+                printNote(note);
+                free(note);
+                break;
+            default:
+                break;
+        }
+    }
 
     return 0;
+}
+
+
+void printNote(sNote* note) {
+    printf("\n%s\n", note->name);
+    printf("----------------------------");
+    printf("\n\t%s\n", note->content);
+};
+
+void createNote(sNote* note) {
+    printf("Enter note name: %lu characters\n", sizeof(note->name));
+    fgets(note->name, sizeof(note->name), stdin);
+    printf("Enter note content: %lu characters\n", sizeof(note->content));
+    fgets(note->content, sizeof(note->content), stdin);
+}
+
+void clearInputBuffer(void) {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {} // Clear the input buffer
 }
